@@ -1,0 +1,39 @@
+{
+  "name": "doublesec",
+  "version": "0.1.0",
+  "private": true,
+  "files": [
+    "dist",
+    "README.md"
+  ],
+  "type": "module",
+  "sideEffects": false,
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    }
+  },
+  "scripts": {
+    "dev": "vp dev --open /demo/",
+    "build": "vp pack && vp build && vp build --mode standalone-demo",
+    "lint": "vp lint",
+    "fmt": "vp fmt",
+    "check": "vp check",
+    "test": "vp test"
+  },
+  "dependencies": {
+    "@noble/ciphers": "2.4.0",
+    "@noble/hashes": "2.2.0"
+  },
+  "devDependencies": {
+    "@types/node": "^24.0.0",
+    "@vitest/coverage-v8": "5.1.0",
+    "typescript": "^5.9.3",
+    "vite-plus": "1.7.0"
+  },
+  "engines": {
+    "node": "^22.18.0 || ^24.11.0 || >=26.0.0"
+  },
+  "packageManager": "pnpm@12.11.2"
+}
