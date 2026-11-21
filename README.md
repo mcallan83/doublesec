@@ -1,8 +1,12 @@
 # DoubleSec
 
-A TypeScript implementation of [Keybase TripleSec v4](https://keybase.io/triplesec) with a Promise API for browser and Node.js applications.
+DoubleSec encrypts data with a passphrase and verifies its integrity when decrypting. A wrong passphrase or modified ciphertext causes decryption to fail.
 
-This library is named DoubleSec because TripleSec v4 has two encryption layers, not three: XSalsa20 encrypts the plaintext, then AES-CTR encrypts the XSalsa20 IV and inner ciphertext.
+It is an independent TypeScript implementation of [Keybase TripleSec v4](https://keybase.io/triplesec), with an asynchronous API for browser and Node.js applications. Built with modern cryptographic libraries, including Noble, it implements the format directly rather than wrapping or depending on TripleSec's original source code.
+
+TripleSec v4 derives keys with scrypt, encrypts in two layers (XSalsa20 followed by AES-CTR), and authenticates the ciphertext with two tags.
+
+The name DoubleSec highlights that v4 only uses two encryption layers, not three.
 
 ## Build
 
@@ -37,6 +41,8 @@ Build, lint, formatting, and test settings live in `vite.config.ts`.
 ## Usage
 
 The package provides named ESM exports for Node.js and browser applications. Every `data` and `passphrase` argument must be a `Uint8Array`; strings are not accepted directly. Passphrases must contain at least one byte. The library does not assess passphrase strength.
+
+The TypeScript declarations use generic typed-array types and require TypeScript 5.7 or later.
 
 | Function                          | What it does                                                             |
 | --------------------------------- | ------------------------------------------------------------------------ |
@@ -110,17 +116,19 @@ const decryptedBytes = await decrypt({ passphrase, data: decodedCiphertext });
 const message = bytesToString(decryptedBytes);
 ```
 
-### Errors and ciphertext size
+### Errors and Ciphertext Size
 
 `encrypt` and `decrypt` return promises and reject if their byte inputs are invalid or an operation fails. Decryption also rejects malformed or unsupported ciphertext and authentication failures, such as a wrong passphrase or altered data. Handle these errors at the point where you can report or recover from them; do not treat failed decryption as an empty message.
 
-## Browser and security notes
+The conversion helpers are synchronous. `base64ToBytes` throws on malformed Base64, and `bytesToString` throws on invalid UTF-8.
+
+## Browser and Security Notes
 
 The library uses native Web Crypto for AES-CTR and HMAC-SHA-512 when supported, and falls back to Noble implementations when those operations are unavailable or blocked. Scrypt, XSalsa20, and HMAC-SHA3-512 use Noble. Encryption requires `crypto.getRandomValues`; supported modern browsers and Node.js versions provide it.
 
 TripleSec v4 uses a fixed scrypt cost for compatibility. Key derivation requires roughly 32 MiB of memory per concurrent operation, so avoid starting many encryptions or decryptions at once. Keep passphrases secret and available for future decryption. Encryption does not conceal the plaintext length.
 
-The standalone browser bundle and demo can be opened locally without loading ES modules. For sensitive inputs, use a trusted local copy or HTTPS: a page delivered over plain HTTP can be altered before the encryption code runs.
+The classic bundle can be loaded with a regular `<script>` tag; the standalone demo is a self-contained HTML file you can open from disk. Neither requires ES module loading or makes network requests. For sensitive inputs, use a trusted local copy or HTTPS: a page delivered over plain HTTP can be altered before the encryption code runs.
 
 ## Compatibility
 
