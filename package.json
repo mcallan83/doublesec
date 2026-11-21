@@ -1,7 +1,13 @@
 {
   "name": "doublesec",
-  "version": "0.1.0",
-  "private": true,
+  "version": "1.0.0",
+  "private": false,
+  "description": "An independent TypeScript implementation of Keybase TripleSec v4 for browsers and Node.js.",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/mcallan83/doublesec.git"
+  },
   "files": [
     "dist",
     "README.md"
