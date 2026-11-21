@@ -133,3 +133,7 @@ The classic bundle can be loaded with a regular `<script>` tag; the standalone d
 ## Compatibility
 
 The tests use a [published Keybase v4 vector](https://github.com/keybase/go-triplesec/blob/master/spec/triplesec_v4.json) to verify byte-for-byte encryption and decryption with and without native browser crypto.
+
+## License
+
+[MIT](./LICENSE)
